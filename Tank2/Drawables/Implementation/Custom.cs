@@ -13,8 +13,8 @@ namespace Tank2.Drawables.Implementation
             PolygonsIndexes = polygonsIndexes;
         }
 
-        protected override List<Vector3> Vertexes { get; set; }
-        protected override List<Vector3> Normals { get; set; }
-        protected override List<List<VertexInfo>> PolygonsIndexes { get; set; }
+        public override List<Vector3> Vertexes { get; protected set; }
+        public override List<Vector3> Normals { get; protected set; }
+        public override List<List<VertexInfo>> PolygonsIndexes { get; protected set; }
     }
 }

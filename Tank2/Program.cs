@@ -8,7 +8,7 @@ namespace Tank2
         {
             using(var window = new Scene())
             {
-                window.Run();
+                window.Run(60, 60);
             }
         }
     }

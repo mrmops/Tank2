@@ -3,14 +3,14 @@ using OpenTK;
 
 namespace Tank2.Drawables.Implementation
 {
-    public class Cube : BaseDrawableGl
+    public class QRectangle: BaseDrawableGl
     {
-        public Cube(Vector3 color) : base(color)
+        public QRectangle(float width, float height, float depth, Vector3 color) : base(color)
         {
-            GenerateVertexes();
+            CreatePolygons(width, height, depth);
         }
 
-        private void GenerateVertexes()
+        private void CreatePolygons(float width, float height, float depth)
         {
             for (int x = -1; x <= 1; x += 2)
             {
@@ -18,12 +18,11 @@ namespace Tank2.Drawables.Implementation
                 {
                     for (int z = -1; z <= 1; z += 2)
                     {
-                        Vertexes.Add(new Vector3(x, y, z));
+                        Vertexes.Add(new Vector3(x * width / 2, y * height / 2, z * depth / 2));
                     }
                 }
             }
         }
-
 
         public override List<Vector3> Vertexes { get; protected set; } = new List<Vector3>();
 

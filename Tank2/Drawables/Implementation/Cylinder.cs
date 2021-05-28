@@ -9,37 +9,39 @@ namespace Tank2.Drawables.Implementation
     public class Cylinder : BaseDrawableGl
     {
         public float Radius { get; private set; }
-        public float Width { get; private set; }
         public int AnglesNumber { get; private set; }
 
-        public Cylinder(Vector3 color, float radius, float width, int anglesNumber) : base(color)
+        public Cylinder(Vector3 color, float radius, int anglesNumber) : base(color)
         {
             Radius = radius;
-            Width = width;
             AnglesNumber = anglesNumber;
-            CreateVertexes(radius, width, anglesNumber);
+            CreateVertexes(radius, anglesNumber);
+            Translate(new Vector3(0, 2, 0));
+            Scale(new Vector3(0.5f, 1f, 0.5f));
+            Rotate(new Vector3(90f, 0f, 0f));
         }
 
-        private void CreateVertexes(float radius, float width, int anglesCount)
+        private void CreateVertexes(float radius, int anglesCount)
         {
             var angel = (float) (2 * Math.PI / anglesCount);
             var rotationMatrix = Matrix4.CreateRotationY(angel);
             var startPoint = new Vector3(radius, 0f, 0f);
             var previousPoint = startPoint;
 
-            Vertexes.Add(new Vector3(startPoint.X, width / 2f, startPoint.Z));
-            Vertexes.Add(new Vector3(startPoint.X, width / -2f, startPoint.Z));
+            Vertexes.Add(new Vector3(startPoint.X, 1 / 2f, startPoint.Z));
+            Vertexes.Add(new Vector3(startPoint.X, 1 / -2f, startPoint.Z));
             Normals.Add(startPoint.Normalized());
 
-            for (int i = 1; i < anglesCount; i++)
+            for (var i = 1; i < anglesCount; i++)
             {
-                var vertexInfos = new List<VertexInfo>();
-                vertexInfos.Add(new VertexInfo(Vertexes.Count - 1, Normals.Count));
-                vertexInfos.Add(new VertexInfo(Vertexes.Count, Normals.Count));
+                var vertexInfos = new List<VertexInfo>
+                {
+                    new VertexInfo(Vertexes.Count - 1, Normals.Count), new VertexInfo(Vertexes.Count, Normals.Count)
+                };
                 var localPoint = (new Vector4(previousPoint, 1) * rotationMatrix).Xyz;
-                var upLocalFirst = new Vector3(localPoint.X, width / 2f, localPoint.Z);
+                var upLocalFirst = new Vector3(localPoint.X, 1 / 2f, localPoint.Z);
                 Vertexes.Add(upLocalFirst);
-                var downLocalFirst = new Vector3(localPoint.X, width / -2f, localPoint.Z);
+                var downLocalFirst = new Vector3(localPoint.X, 1 / -2f, localPoint.Z);
                 Vertexes.Add(downLocalFirst);
                 Normals.Add(localPoint.Normalized());
                 vertexInfos.Add(new VertexInfo(Vertexes.Count, Normals.Count));
@@ -48,11 +50,13 @@ namespace Tank2.Drawables.Implementation
                 previousPoint = localPoint;
             }
 
-            var vertexInfo = new List<VertexInfo>();
-            vertexInfo.Add(new VertexInfo(1, 1));
-            vertexInfo.Add(new VertexInfo(2, 1));
-            vertexInfo.Add(new VertexInfo(Vertexes.Count, Normals.Count));
-            vertexInfo.Add(new VertexInfo(Vertexes.Count - 1, Normals.Count));
+            var vertexInfo = new List<VertexInfo>
+            {
+                new VertexInfo(1, 1),
+                new VertexInfo(2, 1),
+                new VertexInfo(Vertexes.Count, Normals.Count),
+                new VertexInfo(Vertexes.Count - 1, Normals.Count)
+            };
             PolygonsIndexes.Add(vertexInfo);
 
             AddPlugs();
@@ -80,8 +84,8 @@ namespace Tank2.Drawables.Implementation
             PolygonsIndexes.Add(downPlug);
         }
 
-        protected override List<Vector3> Vertexes { get; set; } = new List<Vector3>();
-        protected override List<Vector3> Normals { get; set; } = new List<Vector3>();
-        protected override List<List<VertexInfo>> PolygonsIndexes { get; set; } = new List<List<VertexInfo>>();
+        public override List<Vector3> Vertexes { get; protected set; } = new List<Vector3>();
+        public override List<Vector3> Normals { get; protected set; } = new List<Vector3>();
+        public override List<List<VertexInfo>> PolygonsIndexes { get; protected set; } = new List<List<VertexInfo>>();
     }
 }

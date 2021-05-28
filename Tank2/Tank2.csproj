@@ -20,6 +20,10 @@
       <Content Include="example2.obj">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="d81930b4ed6e0702d4daf02aae30b4da.png" />
+      <Content Include="d81930b4ed6e0702d4daf02aae30b4da.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
